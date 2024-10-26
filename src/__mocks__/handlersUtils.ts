@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { server } from '../setupTests';
 import { Event } from '../types';
 
-// ! Hard 여기 제공 안함
+// ? Medium: 아래 여러가지 use 함수는 어떤 역할을 할까요? 어떻게 사용될 수 있을까요?
 export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
   const mockEvents: Event[] = [...initEvents];
 
