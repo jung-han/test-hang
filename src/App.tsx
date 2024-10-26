@@ -45,7 +45,7 @@ import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
 import { useNotifications } from './hooks/useNotifications.ts';
 import { useSearch } from './hooks/useSearch.ts';
-import { Event, RepeatType } from './types';
+import { Event, RepeatType } from './types.ts';
 import {
   formatDate,
   formatMonth,
@@ -53,9 +53,9 @@ import {
   getEventsForDay,
   getWeekDates,
   getWeeksAtMonth,
-} from './utils/dateUtils';
-import { findOverlappingEvents } from './utils/eventOverlap';
-import { getTimeErrorMessage } from './utils/timeValidation';
+} from './utils/dateUtils.ts';
+import { findOverlappingEvents } from './utils/eventOverlap.ts';
+import { getTimeErrorMessage } from './utils/timeValidation.ts';
 
 const categories = ['업무', '개인', '가족', '기타'];
 
