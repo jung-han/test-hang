@@ -1,6 +1,7 @@
 import { EventForm } from '../types';
 import { formatDate } from './dateUtils';
 
+// ! TEST CASE
 export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
   const events: EventForm[] = [];
   const maxEndDate = new Date('2025-06-30');

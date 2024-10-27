@@ -33,9 +33,10 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
       if (editing) {
         const editingEvent = {
           ...eventData,
-          repeat: {
+          // ! TEST CASE
+          repeat: eventData.repeat ?? {
             type: 'none',
-            interval: 1,
+            interval: 0,
             endDate: '',
           },
         };
@@ -102,6 +103,7 @@ export const useEventOperations = (editing: boolean, onSave?: () => void) => {
     }
   };
 
+  // ! TEST CASE
   const createRepeatEvent = async (eventData: EventForm) => {
     try {
       const newEvents = generateRepeatEvents(eventData);

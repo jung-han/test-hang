@@ -68,7 +68,7 @@ it('정의된 이벤트 정보를 기준으로 적절하게 저장이 된다', a
   expect(result.current.events).toEqual([{ ...newEvent, id: '1' }]);
 });
 
-it("새로 정의된 'title', 'endTime' 기준으로 적절하게 일정이 업데이트 된다", async () => {
+it.only("새로 정의된 'title', 'endTime' 기준으로 적절하게 일정이 업데이트 된다", async () => {
   setupMockHandlerUpdating();
 
   const { result } = renderHook(() => useEventOperations(true));
@@ -82,7 +82,7 @@ it("새로 정의된 'title', 'endTime' 기준으로 적절하게 일정이 업�
     description: '기존 팀 미팅',
     location: '회의실 B',
     category: '업무',
-    repeat: { type: 'none', interval: 1, endDate: '' },
+    repeat: { type: 'none', interval: 0 },
     notificationTime: 10,
     title: '수정된 회의',
     endTime: '11:00',

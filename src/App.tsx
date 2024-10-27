@@ -171,6 +171,7 @@ function App() {
       notificationTime,
     };
 
+    // ! TEST CASE
     if (isRepeating && !editingEvent) {
       await createRepeatEvent(eventData);
       resetForm();
@@ -224,6 +225,7 @@ function App() {
                         >
                           <HStack spacing={1}>
                             {isNotified && <BellIcon />}
+                            // ! TEST CASE
                             {isRepeating && (
                               <Tooltip
                                 label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
@@ -303,6 +305,7 @@ function App() {
                               >
                                 <HStack spacing={1}>
                                   {isNotified && <BellIcon />}
+                                  // ! TEST CASE
                                   {isRepeating && (
                                     <Tooltip
                                       label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
@@ -339,17 +342,14 @@ function App() {
       <Flex gap={6} h="full">
         <VStack w="400px" spacing={5} align="stretch">
           <Heading>{editingEvent ? '일정 수정' : '일정 추가'}</Heading>
-
           <FormControl>
             <FormLabel>제목</FormLabel>
             <Input value={title} onChange={(e) => setTitle(e.target.value)} />
           </FormControl>
-
           <FormControl>
             <FormLabel>날짜</FormLabel>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </FormControl>
-
           <HStack width="100%">
             <FormControl>
               <FormLabel>시작 시간</FormLabel>
@@ -376,17 +376,14 @@ function App() {
               </Tooltip>
             </FormControl>
           </HStack>
-
           <FormControl>
             <FormLabel>설명</FormLabel>
             <Input value={description} onChange={(e) => setDescription(e.target.value)} />
           </FormControl>
-
           <FormControl>
             <FormLabel>위치</FormLabel>
             <Input value={location} onChange={(e) => setLocation(e.target.value)} />
           </FormControl>
-
           <FormControl>
             <FormLabel>카테고리</FormLabel>
             <Select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -398,10 +395,10 @@ function App() {
               ))}
             </Select>
           </FormControl>
-
           {!editingEvent && (
             <FormControl>
               <FormLabel>반복 설정</FormLabel>
+              // ! TEST CASE
               <Checkbox
                 isChecked={isRepeating}
                 onChange={(e) => {
@@ -418,7 +415,6 @@ function App() {
               </Checkbox>
             </FormControl>
           )}
-
           <FormControl>
             <FormLabel>알림 설정</FormLabel>
             <Select
@@ -432,7 +428,7 @@ function App() {
               ))}
             </Select>
           </FormControl>
-
+          // ! TEST CASE
           {isRepeating && !editingEvent && (
             <VStack width="100%">
               <FormControl>
@@ -468,7 +464,6 @@ function App() {
               </HStack>
             </VStack>
           )}
-
           <Button data-testid="event-submit-button" onClick={addOrUpdateEvent} colorScheme="blue">
             {editingEvent ? '일정 수정' : '일정 추가'}
           </Button>
