@@ -1,7 +1,9 @@
-import express from "express";
-import fs from "fs";
-import { readFile } from "fs/promises";
-import path from "path";
+import { randomUUID } from 'crypto';
+import fs from 'fs';
+import { readFile } from 'fs/promises';
+import path from 'path';
+
+import express from 'express';
 
 const app = express();
 const port = 3000;
@@ -10,22 +12,19 @@ const __dirname = path.resolve();
 app.use(express.json());
 
 const getEvents = async () => {
-  const data = await readFile(
-    `${__dirname}/src/__mocks__/response/realEvents.json`,
-    "utf8"
-  );
+  const data = await readFile(`${__dirname}/src/__mocks__/response/realEvents.json`, 'utf8');
 
   return JSON.parse(data);
 };
 
-app.get("/api/events", async (_, res) => {
+app.get('/api/events', async (_, res) => {
   const events = await getEvents();
   res.json(events);
 });
 
-app.post("/api/events", async (req, res) => {
+app.post('/api/events', async (req, res) => {
   const events = await getEvents();
-  const newEvent = { id: Date.now(), ...req.body };
+  const newEvent = { id: randomUUID(), ...req.body };
 
   fs.writeFileSync(
     `${__dirname}/src/__mocks__/response/realEvents.json`,
@@ -37,9 +36,9 @@ app.post("/api/events", async (req, res) => {
   res.status(201).json(newEvent);
 });
 
-app.put("/api/events/:id", async (req, res) => {
+app.put('/api/events/:id', async (req, res) => {
   const events = await getEvents();
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
   const eventIndex = events.events.findIndex((event) => event.id === id);
   if (eventIndex > -1) {
     const newEvents = [...events.events];
@@ -54,13 +53,13 @@ app.put("/api/events/:id", async (req, res) => {
 
     res.json(events.events[eventIndex]);
   } else {
-    res.status(404).send("Event not found");
+    res.status(404).send('Event not found');
   }
 });
 
-app.delete("/api/events/:id", async (req, res) => {
+app.delete('/api/events/:id', async (req, res) => {
   const events = await getEvents();
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
 
   fs.writeFileSync(
     `${__dirname}/src/__mocks__/response/realEvents.json`,

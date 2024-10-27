@@ -3,7 +3,6 @@ import { http, HttpResponse } from 'msw';
 import { server } from '../setupTests';
 import { Event } from '../types';
 
-// ! Hard 여기 제공 안함
 export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
   const mockEvents: Event[] = [...initEvents];
 
@@ -13,7 +12,7 @@ export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
     }),
     http.post('/api/events', async ({ request }) => {
       const newEvent = (await request.json()) as Event;
-      newEvent.id = mockEvents.length + 1; // 간단한 ID 생성
+      newEvent.id = String(mockEvents.length + 1); // 간단한 ID 생성
       mockEvents.push(newEvent);
       return HttpResponse.json(newEvent, { status: 201 });
     })
@@ -23,7 +22,7 @@ export const setupMockHandlerCreation = (initEvents = [] as Event[]) => {
 export const setupMockHandlerUpdating = () => {
   const mockEvents: Event[] = [
     {
-      id: 1,
+      id: '1',
       title: '기존 회의',
       date: '2024-10-15',
       startTime: '09:00',
@@ -35,7 +34,7 @@ export const setupMockHandlerUpdating = () => {
       notificationTime: 10,
     },
     {
-      id: 2,
+      id: '2',
       title: '기존 회의2',
       date: '2024-10-15',
       startTime: '11:00',
@@ -55,7 +54,7 @@ export const setupMockHandlerUpdating = () => {
     http.put('/api/events/:id', async ({ params, request }) => {
       const { id } = params;
       const updatedEvent = (await request.json()) as Event;
-      const index = mockEvents.findIndex((event) => event.id === Number(id));
+      const index = mockEvents.findIndex((event) => event.id === id);
 
       mockEvents[index] = { ...mockEvents[index], ...updatedEvent };
       return HttpResponse.json(mockEvents[index]);
@@ -66,7 +65,7 @@ export const setupMockHandlerUpdating = () => {
 export const setupMockHandlerDeletion = () => {
   const mockEvents: Event[] = [
     {
-      id: 1,
+      id: '1',
       title: '삭제할 이벤트',
       date: '2024-10-15',
       startTime: '09:00',
@@ -85,7 +84,7 @@ export const setupMockHandlerDeletion = () => {
     }),
     http.delete('/api/events/:id', ({ params }) => {
       const { id } = params;
-      const index = mockEvents.findIndex((event) => event.id === Number(id));
+      const index = mockEvents.findIndex((event) => event.id === id);
 
       mockEvents.splice(index, 1);
       return new HttpResponse(null, { status: 204 });
