@@ -45,7 +45,7 @@ import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
 import { useNotifications } from './hooks/useNotifications.ts';
 import { useSearch } from './hooks/useSearch.ts';
-import { Event, RepeatType } from './types';
+import { Event, EventForm, RepeatType } from './types';
 import {
   formatDate,
   formatMonth,
@@ -138,8 +138,8 @@ function App() {
       return;
     }
 
-    const eventData: Event = {
-      id: editingEvent ? editingEvent.id : Date.now(),
+    const eventData: Event | EventForm = {
+      id: editingEvent ? editingEvent.id : undefined,
       title,
       date,
       startTime,
@@ -547,7 +547,7 @@ function App() {
                 onClick={() => {
                   setIsOverlapDialogOpen(false);
                   saveEvent({
-                    id: editingEvent ? editingEvent.id : Date.now(),
+                    id: editingEvent ? editingEvent.id : undefined,
                     title,
                     date,
                     startTime,

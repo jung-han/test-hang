@@ -5,8 +5,8 @@ import { Event } from '../types';
 import { createNotificationMessage, getUpcomingEvents } from '../utils/notificationUtils';
 
 export const useNotifications = (events: Event[]) => {
-  const [notifications, setNotifications] = useState<{ id: number; message: string }[]>([]);
-  const [notifiedEvents, setNotifiedEvents] = useState<number[]>([]);
+  const [notifications, setNotifications] = useState<{ id: string; message: string }[]>([]);
+  const [notifiedEvents, setNotifiedEvents] = useState<string[]>([]);
 
   const checkUpcomingEvents = () => {
     const now = new Date();
