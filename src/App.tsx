@@ -406,10 +406,8 @@ function App() {
                 isChecked={isRepeating}
                 onChange={(e) => {
                   const checked = e.target.checked;
-                  console.log(checked, '!!');
                   setIsRepeating(checked);
                   if (checked) {
-                    console.log('그럼 여기잖아..');
                     setRepeatType('daily');
                   } else {
                     setRepeatType('none');

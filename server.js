@@ -40,7 +40,6 @@ app.put('/api/events/:id', async (req, res) => {
   const events = await getEvents();
   const id = req.params.id;
   const eventIndex = events.events.findIndex((event) => event.id === id);
-  console.log(eventIndex);
   if (eventIndex > -1) {
     const newEvents = [...events.events];
     newEvents[eventIndex] = { ...events.events[eventIndex], ...req.body };
