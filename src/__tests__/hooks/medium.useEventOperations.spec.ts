@@ -27,7 +27,7 @@ it('저장되어있는 초기 이벤트 데이터를 적절하게 불러온다',
 
   expect(result.current.events).toEqual([
     {
-      id: 1,
+      id: '1',
       title: '기존 회의',
       date: '2024-10-15',
       startTime: '09:00',
@@ -42,14 +42,14 @@ it('저장되어있는 초기 이벤트 데이터를 적절하게 불러온다',
 });
 
 it('정의된 이벤트 정보를 기준으로 적절하게 저장이 된다', async () => {
-  setupMockHandlerCreation(); // ? Med: 이걸 왜 써야하는지 물어보자
+  setupMockHandlerCreation();
 
   const { result } = renderHook(() => useEventOperations(false));
 
   await act(() => Promise.resolve(null));
 
   const newEvent: Event = {
-    id: Date.now(),
+    id: '1',
     title: '새 회의',
     date: '2024-10-16',
     startTime: '11:00',
@@ -65,7 +65,7 @@ it('정의된 이벤트 정보를 기준으로 적절하게 저장이 된다', a
     await result.current.saveEvent(newEvent);
   });
 
-  expect(result.current.events).toEqual([{ ...newEvent, id: 1 }]);
+  expect(result.current.events).toEqual([{ ...newEvent, id: '1' }]);
 });
 
 it("새로 정의된 'title', 'endTime' 기준으로 적절하게 일정이 업데이트 된다", async () => {
@@ -76,13 +76,13 @@ it("새로 정의된 'title', 'endTime' 기준으로 적절하게 일정이 업�
   await act(() => Promise.resolve(null));
 
   const updatedEvent: Event = {
-    id: 1,
+    id: '1',
     date: '2024-10-15',
     startTime: '09:00',
     description: '기존 팀 미팅',
     location: '회의실 B',
     category: '업무',
-    repeat: { type: 'none', interval: 0 },
+    repeat: { type: 'none', interval: 1, endDate: '' },
     notificationTime: 10,
     title: '수정된 회의',
     endTime: '11:00',
@@ -101,7 +101,7 @@ it('존재하는 이벤트 삭제 시 에러없이 아이템이 삭제된다.', 
   const { result } = renderHook(() => useEventOperations(false));
 
   await act(async () => {
-    await result.current.deleteEvent(1);
+    await result.current.deleteEvent('1');
   });
 
   await act(() => Promise.resolve(null));
@@ -136,7 +136,7 @@ it("존재하지 않는 이벤트 수정 시 '일정 저장 실패'라는 토스
   await act(() => Promise.resolve(null));
 
   const nonExistentEvent: Event = {
-    id: 999, // 존재하지 않는 ID
+    id: '999', // 존재하지 않는 ID
     title: '존재하지 않는 이벤트',
     date: '2024-07-20',
     startTime: '09:00',
@@ -172,7 +172,7 @@ it("네트워크 오류 시 '일정 삭제 실패'라는 텍스트가 노출되�
   await act(() => Promise.resolve(null));
 
   await act(async () => {
-    await result.current.deleteEvent(1);
+    await result.current.deleteEvent('1');
   });
 
   expect(toastFn).toHaveBeenCalledWith({
