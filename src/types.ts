@@ -4,10 +4,10 @@ export interface RepeatInfo {
   type: RepeatType;
   interval: number;
   endDate?: string;
+  repeatId?: string;
 }
 
-export interface Event {
-  id: number;
+export interface EventForm {
   title: string;
   date: string;
   startTime: string;
@@ -17,4 +17,8 @@ export interface Event {
   category: string;
   repeat: RepeatInfo;
   notificationTime: number; // 분 단위로 저장
+}
+
+export interface Event extends EventForm {
+  id: string;
 }

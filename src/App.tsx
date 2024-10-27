@@ -4,6 +4,7 @@ import {
   ChevronRightIcon,
   DeleteIcon,
   EditIcon,
+  RepeatIcon,
 } from '@chakra-ui/icons';
 import {
   Alert,
@@ -45,7 +46,7 @@ import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
 import { useNotifications } from './hooks/useNotifications.ts';
 import { useSearch } from './hooks/useSearch.ts';
-import { Event, RepeatType } from './types';
+import { Event, EventForm, RepeatType } from './types';
 import {
   formatDate,
   formatMonth,
@@ -68,6 +69,21 @@ const notificationOptions = [
   { value: 120, label: '2시간 전' },
   { value: 1440, label: '1일 전' },
 ];
+
+const getRepeatTypeLabel = (type: RepeatType): string => {
+  switch (type) {
+    case 'daily':
+      return '일';
+    case 'weekly':
+      return '주';
+    case 'monthly':
+      return '월';
+    case 'yearly':
+      return '년';
+    default:
+      return '';
+  }
+};
 
 function App() {
   const {
@@ -102,9 +118,9 @@ function App() {
     resetForm,
     editEvent,
   } = useEventForm();
-
-  const { events, saveEvent, deleteEvent } = useEventOperations(Boolean(editingEvent), () =>
-    setEditingEvent(null)
+  const { events, saveEvent, deleteEvent, createRepeatEvent } = useEventOperations(
+    Boolean(editingEvent),
+    () => setEditingEvent(null)
   );
 
   const { notifications, notifiedEvents, setNotifications } = useNotifications(events);
@@ -138,8 +154,8 @@ function App() {
       return;
     }
 
-    const eventData: Event = {
-      id: editingEvent ? editingEvent.id : Date.now(),
+    const eventData: EventForm | Event = {
+      id: editingEvent ? editingEvent.id : undefined,
       title,
       date,
       startTime,
@@ -155,13 +171,18 @@ function App() {
       notificationTime,
     };
 
-    const overlapping = findOverlappingEvents(eventData, events);
-    if (overlapping.length > 0) {
-      setOverlappingEvents(overlapping);
-      setIsOverlapDialogOpen(true);
-    } else {
-      await saveEvent(eventData);
+    if (isRepeating && !editingEvent) {
+      await createRepeatEvent(eventData);
       resetForm();
+    } else {
+      const overlapping = findOverlappingEvents(eventData, events);
+      if (overlapping.length > 0) {
+        setOverlappingEvents(overlapping);
+        setIsOverlapDialogOpen(true);
+      } else {
+        await saveEvent(eventData);
+        resetForm();
+      }
     }
   };
 
@@ -189,6 +210,8 @@ function App() {
                     .filter((event) => new Date(event.date).toDateString() === date.toDateString())
                     .map((event) => {
                       const isNotified = notifiedEvents.includes(event.id);
+                      const isRepeating = event.repeat.type !== 'none';
+
                       return (
                         <Box
                           key={event.id}
@@ -201,6 +224,15 @@ function App() {
                         >
                           <HStack spacing={1}>
                             {isNotified && <BellIcon />}
+                            {isRepeating && (
+                              <Tooltip
+                                label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
+                                  event.repeat.endDate ? ` (종료: ${event.repeat.endDate})` : ''
+                                }`}
+                              >
+                                <RepeatIcon color="blue.500" />
+                              </Tooltip>
+                            )}
                             <Text fontSize="sm" noOfLines={1}>
                               {event.title}
                             </Text>
@@ -258,6 +290,7 @@ function App() {
                           )}
                           {getEventsForDay(filteredEvents, day).map((event) => {
                             const isNotified = notifiedEvents.includes(event.id);
+                            const isRepeating = event.repeat.type !== 'none';
                             return (
                               <Box
                                 key={event.id}
@@ -270,6 +303,17 @@ function App() {
                               >
                                 <HStack spacing={1}>
                                   {isNotified && <BellIcon />}
+                                  {isRepeating && (
+                                    <Tooltip
+                                      label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
+                                        event.repeat.endDate
+                                          ? ` (종료: ${event.repeat.endDate})`
+                                          : ''
+                                      }`}
+                                    >
+                                      <RepeatIcon color="blue.500" />
+                                    </Tooltip>
+                                  )}
                                   <Text fontSize="sm" noOfLines={1}>
                                     {event.title}
                                   </Text>
@@ -355,12 +399,27 @@ function App() {
             </Select>
           </FormControl>
 
-          <FormControl>
-            <FormLabel>반복 설정</FormLabel>
-            <Checkbox isChecked={isRepeating} onChange={(e) => setIsRepeating(e.target.checked)}>
-              반복 일정
-            </Checkbox>
-          </FormControl>
+          {!editingEvent && (
+            <FormControl>
+              <FormLabel>반복 설정</FormLabel>
+              <Checkbox
+                isChecked={isRepeating}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  console.log(checked, '!!');
+                  setIsRepeating(checked);
+                  if (checked) {
+                    console.log('그럼 여기잖아..');
+                    setRepeatType('daily');
+                  } else {
+                    setRepeatType('none');
+                  }
+                }}
+              >
+                반복 일정
+              </Checkbox>
+            </FormControl>
+          )}
 
           <FormControl>
             <FormLabel>알림 설정</FormLabel>
@@ -376,7 +435,7 @@ function App() {
             </Select>
           </FormControl>
 
-          {isRepeating && (
+          {isRepeating && !editingEvent && (
             <VStack width="100%">
               <FormControl>
                 <FormLabel>반복 유형</FormLabel>
@@ -464,6 +523,15 @@ function App() {
                   <VStack align="start">
                     <HStack>
                       {notifiedEvents.includes(event.id) && <BellIcon color="red.500" />}
+                      {event.repeat.type !== 'none' && (
+                        <Tooltip
+                          label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
+                            event.repeat.endDate ? ` (종료: ${event.repeat.endDate})` : ''
+                          }`}
+                        >
+                          <RepeatIcon color="blue.500" />
+                        </Tooltip>
+                      )}
                       <Text
                         fontWeight={notifiedEvents.includes(event.id) ? 'bold' : 'normal'}
                         color={notifiedEvents.includes(event.id) ? 'red.500' : 'inherit'}
@@ -547,7 +615,7 @@ function App() {
                 onClick={() => {
                   setIsOverlapDialogOpen(false);
                   saveEvent({
-                    id: editingEvent ? editingEvent.id : Date.now(),
+                    id: editingEvent ? editingEvent.id : undefined,
                     title,
                     date,
                     startTime,
