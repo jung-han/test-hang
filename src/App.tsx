@@ -45,7 +45,7 @@ import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
 import { useNotifications } from './hooks/useNotifications.ts';
 import { useSearch } from './hooks/useSearch.ts';
-import { Event, RepeatType } from './types.ts';
+import { Event, EventForm, RepeatType } from './types';
 import {
   formatDate,
   formatMonth,
@@ -53,9 +53,9 @@ import {
   getEventsForDay,
   getWeekDates,
   getWeeksAtMonth,
-} from './utils/dateUtils.ts';
-import { findOverlappingEvents } from './utils/eventOverlap.ts';
-import { getTimeErrorMessage } from './utils/timeValidation.ts';
+} from './utils/dateUtils';
+import { findOverlappingEvents } from './utils/eventOverlap';
+import { getTimeErrorMessage } from './utils/timeValidation';
 
 const categories = ['업무', '개인', '가족', '기타'];
 
@@ -138,8 +138,8 @@ function App() {
       return;
     }
 
-    const eventData: Event = {
-      id: editingEvent ? editingEvent.id : Date.now(),
+    const eventData: Event | EventForm = {
+      id: editingEvent ? editingEvent.id : undefined,
       title,
       date,
       startTime,
@@ -547,7 +547,7 @@ function App() {
                 onClick={() => {
                   setIsOverlapDialogOpen(false);
                   saveEvent({
-                    id: editingEvent ? editingEvent.id : Date.now(),
+                    id: editingEvent ? editingEvent.id : undefined,
                     title,
                     date,
                     startTime,
