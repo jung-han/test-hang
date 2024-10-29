@@ -4,7 +4,7 @@ import { createNotificationMessage, getUpcomingEvents } from '../../utils/notifi
 describe('getUpcomingEvents', () => {
   const events: Event[] = [
     {
-      id: 1,
+      id: '1',
       title: '이벤트 1',
       date: '2023-05-10',
       startTime: '10:00',
@@ -16,7 +16,7 @@ describe('getUpcomingEvents', () => {
       notificationTime: 10,
     },
     {
-      id: 2,
+      id: '2',
       title: '이벤트 2',
       date: '2023-05-10',
       startTime: '14:00',
@@ -28,7 +28,7 @@ describe('getUpcomingEvents', () => {
       notificationTime: 30,
     },
     {
-      id: 3,
+      id: '3',
       title: '이벤트 3',
       date: '2023-05-11',
       startTime: '09:00',
@@ -75,7 +75,7 @@ describe('getUpcomingEvents', () => {
 describe('createNotificationMessage', () => {
   it('올바른 알림 메시지를 생성해야 한다', () => {
     const event: Event = {
-      id: 1,
+      id: '1',
       title: '중요 회의',
       date: '2023-05-10',
       startTime: '10:00',

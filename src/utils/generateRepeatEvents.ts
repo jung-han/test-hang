@@ -13,7 +13,7 @@ export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
 
   let currentDate = new Date(startDate);
 
-  if (eventData.repeat.type === 'none') {
+  if (eventData.repeat.type === 'none' || eventData.repeat.interval === 0) {
     return [eventData];
   }
 
@@ -48,7 +48,11 @@ export const generateRepeatEvents = (eventData: EventForm): EventForm[] => {
       }
 
       case 'yearly': {
-        currentDate.setFullYear(currentDate.getFullYear() + eventData.repeat.interval);
+        if (originalMonth === 1 && originalDay === 29) {
+          currentDate.setFullYear(currentDate.getFullYear() + 4);
+        } else {
+          currentDate.setFullYear(currentDate.getFullYear() + eventData.repeat.interval);
+        }
 
         currentDate.setMonth(originalMonth);
         currentDate.setDate(originalDay);
