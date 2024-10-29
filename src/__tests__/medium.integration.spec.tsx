@@ -256,7 +256,7 @@ describe('일정 충돌', () => {
   it('겹치는 시간에 새 일정을 추가할 때 경고가 표시된다', async () => {
     setupMockHandlerCreation([
       {
-        id: 1,
+        id: '1',
         title: '기존 회의',
         date: '2024-10-15',
         startTime: '09:00',

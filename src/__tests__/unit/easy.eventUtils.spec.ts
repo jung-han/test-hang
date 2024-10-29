@@ -4,7 +4,7 @@ import { getFilteredEvents } from '../../utils/eventUtils';
 describe('getFilteredEvents', () => {
   const events: Event[] = [
     {
-      id: 1,
+      id: '1',
       title: '이벤트 1',
       date: '2024-07-01',
       startTime: '10:00',
@@ -16,7 +16,7 @@ describe('getFilteredEvents', () => {
       notificationTime: 0,
     },
     {
-      id: 2,
+      id: '2',
       title: '이벤트 2',
       date: '2024-07-05',
       startTime: '14:00',
@@ -28,7 +28,7 @@ describe('getFilteredEvents', () => {
       notificationTime: 0,
     },
     {
-      id: 3,
+      id: '3',
       title: '이벤트 3',
       date: '2024-07-10',
       startTime: '09:00',
@@ -79,7 +79,7 @@ describe('getFilteredEvents', () => {
   it('월의 경계에 있는 이벤트를 올바르게 필터링한다', () => {
     const borderEvents: Event[] = [
       {
-        id: 4,
+        id: '4',
         title: '6월 마지막 날 이벤트',
         date: '2024-06-30',
         startTime: '23:00',
@@ -92,7 +92,7 @@ describe('getFilteredEvents', () => {
       },
       ...events,
       {
-        id: 5,
+        id: '5',
         title: '8월 첫 날 이벤트',
         date: '2024-08-01',
         startTime: '00:00',
