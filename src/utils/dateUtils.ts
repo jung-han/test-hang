@@ -12,12 +12,12 @@ export function getDaysInMonth(year: number, month: number): number {
  */
 export function getWeekDates(date: Date): Date[] {
   const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // 주의 시작을 월요일로 조정
-  const monday = new Date(date.setDate(diff));
+  const diff = date.getDate() - day;
+  const sunday = new Date(date.setDate(diff));
   const weekDates = [];
   for (let i = 0; i < 7; i++) {
-    const nextDate = new Date(monday);
-    nextDate.setDate(monday.getDate() + i);
+    const nextDate = new Date(sunday);
+    nextDate.setDate(sunday.getDate() + i);
     weekDates.push(nextDate);
   }
   return weekDates;
@@ -26,7 +26,7 @@ export function getWeekDates(date: Date): Date[] {
 export function getWeeksAtMonth(currentDate: Date) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
-  const daysInMonth = getDaysInMonth(year, month);
+  const daysInMonth = getDaysInMonth(year, month + 1);
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const weeks = [];
@@ -55,13 +55,23 @@ export function getEventsForDay(events: Event[], date: number): Event[] {
   return events.filter((event) => new Date(event.date).getDate() === date);
 }
 
-/**
- * 주어진 날짜의 주 정보를 "YYYY년 M월 W주" 형식으로 반환합니다.
- */
-export function formatWeek(date: Date): string {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const weekNumber = Math.ceil(date.getDate() / 7);
+export function formatWeek(targetDate: Date) {
+  const dayOfWeek = targetDate.getDay();
+  const diffToThursday = 4 - dayOfWeek;
+  const thursday = new Date(targetDate);
+  thursday.setDate(targetDate.getDate() + diffToThursday);
+
+  const year = thursday.getFullYear();
+  const month = thursday.getMonth() + 1;
+
+  const firstDayOfMonth = new Date(thursday.getFullYear(), thursday.getMonth(), 1);
+
+  const firstThursday = new Date(firstDayOfMonth);
+  firstThursday.setDate(1 + ((4 - firstDayOfMonth.getDay() + 7) % 7));
+
+  const weekNumber: number =
+    Math.floor((thursday.getTime() - firstThursday.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1;
+
   return `${year}년 ${month}월 ${weekNumber}주`;
 }
 
