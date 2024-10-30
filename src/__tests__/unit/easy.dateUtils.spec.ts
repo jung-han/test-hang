@@ -105,7 +105,7 @@ describe('getWeeksAtMonth', () => {
 describe('getEventsForDay', () => {
   const events: Event[] = [
     {
-      id: 1,
+      id: '1',
       title: '이벤트 1',
       date: '2024-07-01',
       startTime: '09:00',
@@ -117,7 +117,7 @@ describe('getEventsForDay', () => {
       notificationTime: 0,
     },
     {
-      id: 2,
+      id: '2',
       title: '이벤트 2',
       date: '2024-07-01',
       startTime: '14:00',
@@ -129,7 +129,7 @@ describe('getEventsForDay', () => {
       notificationTime: 0,
     },
     {
-      id: 3,
+      id: '3',
       title: '이벤트 3',
       date: '2024-07-02',
       startTime: '11:00',

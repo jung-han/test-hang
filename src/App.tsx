@@ -163,11 +163,16 @@ function App() {
       description,
       location,
       category,
-      repeat: {
-        type: isRepeating ? repeatType : 'none',
-        interval: repeatInterval,
-        endDate: repeatEndDate || undefined,
-      },
+      repeat: editingEvent
+        ? {
+            type: 'none',
+            interval: 0,
+          }
+        : {
+            type: isRepeating ? repeatType : 'none',
+            interval: repeatInterval,
+            endDate: repeatEndDate || undefined,
+          },
       notificationTime,
     };
 
@@ -225,7 +230,7 @@ function App() {
                         >
                           <HStack spacing={1}>
                             {isNotified && <BellIcon />}
-                            // ! TEST CASE
+                            {/* ! TEST CASE */}
                             {isRepeating && (
                               <Tooltip
                                 label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
@@ -305,7 +310,7 @@ function App() {
                               >
                                 <HStack spacing={1}>
                                   {isNotified && <BellIcon />}
-                                  // ! TEST CASE
+                                  {/* ! TEST CASE */}
                                   {isRepeating && (
                                     <Tooltip
                                       label={`${event.repeat.interval}${getRepeatTypeLabel(event.repeat.type)}마다 반복${
@@ -398,7 +403,7 @@ function App() {
           {!editingEvent && (
             <FormControl>
               <FormLabel>반복 설정</FormLabel>
-              // ! TEST CASE
+              {/* ! TEST CASE */}
               <Checkbox
                 isChecked={isRepeating}
                 onChange={(e) => {
@@ -428,7 +433,7 @@ function App() {
               ))}
             </Select>
           </FormControl>
-          // ! TEST CASE
+          {/* ! TEST CASE */}
           {isRepeating && !editingEvent && (
             <VStack width="100%">
               <FormControl>
