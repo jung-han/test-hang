@@ -13,6 +13,7 @@ export const useCalendarView = () => {
       if (view === 'week') {
         newDate.setDate(newDate.getDate() + (direction === 'next' ? 7 : -7));
       } else if (view === 'month') {
+        newDate.setDate(1); // 항상 1일로 설정
         newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
       }
       return newDate;
