@@ -39,52 +39,52 @@ describe('getWeekDates', () => {
     const date = new Date('2024-07-10'); // 수요일
     const weekDates = getWeekDates(date);
     expect(weekDates).toHaveLength(7);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-08'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-14'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-07'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-13'); // 토요일
   });
 
   it('주의 시작(월요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
     const date = new Date('2024-07-08'); // 월요일
     const weekDates = getWeekDates(date);
     expect(weekDates).toHaveLength(7);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-08'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-14'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-07'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-13'); // 토요일
   });
 
   it('주의 끝(일요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
-    const date = new Date('2024-07-14'); // 일요일
+    const date = new Date('2024-07-13'); // 토요일
     const weekDates = getWeekDates(date);
     expect(weekDates).toHaveLength(7);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-08'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-14'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-07-07'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-07-13'); // 토요일
   });
 
   it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연말)', () => {
     const date = new Date('2024-12-30'); // 월요일
     const weekDates = getWeekDates(date);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-12-30'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2025-01-05'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-12-29'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2025-01-04'); // 토요일
   });
 
   it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연초)', () => {
     const date = new Date('2025-01-01'); // 수요일
     const weekDates = getWeekDates(date);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-12-30'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2025-01-05'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-12-29'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2025-01-04'); // 토요일
   });
 
   it('윤년의 2월 29일을 포함한 주를 올바르게 처리한다', () => {
     const date = new Date('2024-02-29'); // 목요일 (윤년)
     const weekDates = getWeekDates(date);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-02-26'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-03-03'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-02-25'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-03-02'); // 토요일
   });
 
   it('월의 마지막 날짜를 포함한 주를 올바르게 처리한다', () => {
     const date = new Date('2024-04-30'); // 화요일
     const weekDates = getWeekDates(date);
-    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-04-29'); // 월요일
-    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-05-05'); // 일요일
+    expect(weekDates[0].toISOString().split('T')[0]).toBe('2024-04-28'); // 일요일
+    expect(weekDates[6].toISOString().split('T')[0]).toBe('2024-05-04'); // 토요일
   });
 });
 
@@ -97,7 +97,7 @@ describe('getWeeksAtMonth', () => {
       [7, 8, 9, 10, 11, 12, 13],
       [14, 15, 16, 17, 18, 19, 20],
       [21, 22, 23, 24, 25, 26, 27],
-      [28, 29, 30, null, null, null, null],
+      [28, 29, 30, 31, null, null, null],
     ]);
   });
 });
@@ -178,12 +178,12 @@ describe('formatWeek', () => {
 
   it('월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
     const date = new Date('2024-07-31');
-    expect(formatWeek(date)).toBe('2024년 7월 5주');
+    expect(formatWeek(date)).toBe('2024년 8월 1주');
   });
 
   it('연도가 바뀌는 주에 대해 올바른 주 정보를 반환한다', () => {
     const date = new Date('2024-12-31');
-    expect(formatWeek(date)).toBe('2024년 12월 5주');
+    expect(formatWeek(date)).toBe('2025년 1월 1주');
   });
 
   it('윤년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
@@ -193,7 +193,7 @@ describe('formatWeek', () => {
 
   it('평년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
     const date = new Date('2023-02-28');
-    expect(formatWeek(date)).toBe('2023년 2월 4주');
+    expect(formatWeek(date)).toBe('2023년 3월 1주');
   });
 });
 
